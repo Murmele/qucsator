@@ -28,6 +28,7 @@
 #define LOG_ERROR  0
 #define LOG_STATUS 1
 #include <stdio.h>
+#include "qucs_typedefs.h"
 __BEGIN_DECLS
 
 void logprint (int, const char *, ...);
