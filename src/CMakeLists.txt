@@ -10,6 +10,9 @@ if (NOT qucsator_SOURCE_DIR)
 	set(qucsator_BINARY_DIR ${qucsator_app_BINARY_DIR})
 endif()
 
+find_package(BISON REQUIRED)
+find_package(FLEX REQUIRED)
+
 ##
 ## Checks for libraries.
 ##
@@ -288,49 +291,54 @@ configure_file("${qucsator_SOURCE_DIR}/qucs_typedefs.h.cmake"
 configure_file("${qucsator_SOURCE_DIR}/config.h.cmake"
 	"${qucsator_BINARY_DIR}/config.h")
 
-##
-## List of lexer/parsers type names
-##
-#set(ParserTypes
-#    csv
-#    citi
-#    dataset
-#    mdl
-#    netlist
-#    touchstone
-#    zvr)
+#
+# List of lexer/parsers type names
+#
+set(ParserTypes
+	csv
+	citi
+	dataset
+	mdl
+	netlist
+	touchstone
+	zvr)
 
-#set(generated_SRC)
-#foreach(type ${ParserTypes})
-#  # Create custom Bison
-#  set(bisonIn "${CMAKE_CURRENT_SOURCE_DIR}/parse_${type}.ypp")
-#  set(bisonOut "parse_${type}.hpp"
-#               "parse_${type}.cpp")
-#  add_custom_command(
-#    OUTPUT ${bisonOut}
-#    COMMAND
-#      ${BISON_EXECUTABLE}
-#      --defines=parse_${type}.hpp
-#      --output=parse_${type}.cpp
-#      ${bisonIn}
-#    DEPENDS ${bisonIn})
-#  # Create custom Flex
-#  set(flexIn "${CMAKE_CURRENT_SOURCE_DIR}/scan_${type}.lpp")
-#  set(flexOut "scan_${type}.cpp")
-#  add_custom_command(
-#    OUTPUT ${flexOut}
-#    COMMAND ${FLEX_EXECUTABLE} --outfile=${flexOut} ${flexIn}
-#    DEPENDS ${flexIn})
+set(generated_SRC)
+foreach(type ${ParserTypes})
+  # Create custom Bison
+  set(bisonIn "${CMAKE_CURRENT_SOURCE_DIR}/parse_${type}.ypp")
+  set(bisonOut "parse_${type}.hpp"
+	  "parse_${type}.cpp")
+  add_custom_command(
+	  OUTPUT ${bisonOut}
+	COMMAND
+	${BISON_EXECUTABLE}
+	  --defines=parse_${type}.hpp
+	  --output=parse_${type}.cpp
+	  ${bisonIn}
+	  DEPENDS ${bisonIn})
+# Create custom Flex
+set(flexIn "${CMAKE_CURRENT_SOURCE_DIR}/scan_${type}.lpp")
+set(flexOut "scan_${type}.cpp")
+add_custom_command(
+	  OUTPUT ${flexOut}
+	COMMAND ${FLEX_EXECUTABLE} --outfile=${flexOut} ${flexIn}
+	DEPENDS ${flexIn})
 
-#  list(APPEND generated_SRC ${bisonOut})
-#  list(APPEND generated_SRC ${flexOut})
-#endforeach()
+list(APPEND generated_SRC ${bisonOut})
+list(APPEND generated_SRC ${flexOut})
+endforeach()
 
 
 #
 # Source code libqucs
 #
 #    equation.cpp # <= depends on gperfapphash.cpp
+#list(LENGTH ${generated_SRC} NUMBER_ELEMENTS)
+#message("NUMBER_ELEMENTS: ${NUMBER_ELEMENTS}")
+#if (${NUMBER_ELEMENTS} LESS_EQUAL "0")
+#	message(FATAL_ERROR "No files generated")
+#endif(
 readVariable(MakeList SRCS LIBQUCS_SRC)
 list(APPEND LIBQUCS_SRC ${generated_SRC})
 
@@ -346,17 +354,6 @@ readVariable(MakeList HDRS PUBLIC_HEADERS)
 list(APPEND PUBLIC_HEADERS
 	${qucsator_BINARY_DIR}/config.h
 	${qucsator_BINARY_DIR}/qucs_typedefs.h)
-
-#include_directories(
-#  ${qucs-core_SOURCE_DIR} # generated config.h
-#  ${qucs-core_SOURCE_DIR}/src/math # precision.h
-#  ${qucs-core_SOURCE_DIR}/src/ # compat.h
-#  ${qucs-core_SOURCE_DIR}/src/components # microstrip/substrate.h
-#  ${qucs-core_SOURCE_DIR}/src/interface
-#  ${qucs-core_BINARY_DIR} # cmake generated config.h
-#  ${qucs-core_BINARY_DIR}/src # cmake generated gperfapphash.h
-#  ${qucs-core_BINARY_DIR}/src/components # generated verilog/[].core.h
-#)
 
 ##
 ## Replace 'evaluate::[whatever]' by NULL
@@ -443,6 +440,22 @@ add_library(
   $<TARGET_OBJECTS:coreMicrostrip>
   $<TARGET_OBJECTS:coreDevices>
   $<TARGET_OBJECTS:coreDigital>)
+
+#include_directories(
+#  ${qucs-core_SOURCE_DIR} # generated config.h
+#  ${qucs-core_SOURCE_DIR}/src/math # precision.h
+#  ${qucs-core_SOURCE_DIR}/src/ # compat.h
+#  ${qucs-core_SOURCE_DIR}/src/components # microstrip/substrate.h
+#  ${qucs-core_SOURCE_DIR}/src/interface
+#  ${qucs-core_BINARY_DIR} # cmake generated config.h
+#  ${qucs-core_BINARY_DIR}/src # cmake generated gperfapphash.h
+#  ${qucs-core_BINARY_DIR}/src/components # generated verilog/[].core.h
+#)
+target_include_directories(libqucsator PRIVATE
+	${qucsator_BINARY_DIR} # qucs_typedefs.h
+	${qucsator_app_BINARY_DIR} # generated sources are located here
+	${qucsator_app_SOURCE_DIR}
+	${qucsator_app_SOURCE_DIR}/math)
 
 ## rename the library to let it be libqucsator (not liblibqucsator)
 #set_target_properties(libqucsator PROPERTIES OUTPUT_NAME qucsator)
