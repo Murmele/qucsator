@@ -116,6 +116,8 @@ set(PACKAGE_URL "http://sourceforge.net/projects/qucs/")
 
 # Define to the version of this package.
 set(PACKAGE_VERSION ${PROJECT_VERSION})
+# add compiler definitions/symbols
+add_compile_definitions(PACKAGE_VERSION="${PACKAGE_VERSION}")
 
 ##
 ## Avoid source tree pollution
