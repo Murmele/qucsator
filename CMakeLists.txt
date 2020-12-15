@@ -137,57 +137,55 @@ add_compile_definitions(PACKAGE_VERSION="${PACKAGE_VERSION}")
 ##
 #set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules/")
 
-##
-## Need Flex
-##
-#find_package(FLEX 2.5.9 REQUIRED)
-#if(FLEX_FOUND)
-#endif()
+#
+# Need Flex
+#
+find_package(FLEX 2.5.4 REQUIRED)
 
-## ~~~
-## Need Bison
-##
-## This is a HACK to get arround a PATH issue with Qt Creator on OSX.
-## It seams impossible to pass a custom PATH to Qt Creator on OSX, ie, cannot prepend `/usr/local/bin/` for intance.
-## The FIND_PACKAGE fails. For now we provide a fallback with a custom FIND_PROGRAM.
-## The variable BISON_DIR is also available.
-## ~~~
-#if(WIN32)
-#  find_package(BISON 2.4 REQUIRED)
-#else() # Linux, OSX
-#  # use -DBISON_DIR=/path/ to provide the path to bison
-#  find_program(
-#    BISON_EXECUTABLE bison
-#    PATHS /usr/local/bin/ /opt/local/bin/ /usr/bin ${BISON_DIR}
-#    DOC "bison path"
-#    NO_DEFAULT_PATH)
-#  if(BISON_EXECUTABLE)
-#    message(STATUS "Found bison: " ${BISON_EXECUTABLE})
-#  else()
-#    message(
-#      FATAL_ERROR "Unable to find bison. Try to provide -DBISON_DIR=[path]")
-#  endif()
-#endif()
+# ~~~
+# Need Bison
+#
+# This is a HACK to get arround a PATH issue with Qt Creator on OSX.
+# It seams impossible to pass a custom PATH to Qt Creator on OSX, ie, cannot prepend `/usr/local/bin/` for intance.
+# The FIND_PACKAGE fails. For now we provide a fallback with a custom FIND_PROGRAM.
+# The variable BISON_DIR is also available.
+# ~~~
+if(WIN32)
+  find_package(BISON 2.4 REQUIRED)
+else() # Linux, OSX
+  # use -DBISON_DIR=/path/ to provide the path to bison
+  find_program(
+    BISON_EXECUTABLE bison
+    PATHS /usr/local/bin/ /opt/local/bin/ /usr/bin ${BISON_DIR}
+    DOC "bison path"
+    NO_DEFAULT_PATH)
+  if(BISON_EXECUTABLE)
+    message(STATUS "Found bison: " ${BISON_EXECUTABLE})
+  else()
+    message(
+      FATAL_ERROR "Unable to find bison. Try to provide -DBISON_DIR=[path]")
+  endif()
+endif()
 
-##
-## Check for sed
-##
-#find_program(SED_TOOL NAMES sed)
-#if(NOT SED_TOOL)
-#  message(FATAL_ERROR "Unable to find sed")
-#else()
-#  message(STATUS "Found sed: " ${SED_TOOL})
-#endif()
+#
+# Check for sed
+#
+find_program(SED_TOOL NAMES sed)
+if(NOT SED_TOOL)
+  message(FATAL_ERROR "Unable to find sed")
+else()
+  message(STATUS "Found sed: " ${SED_TOOL})
+endif()
 
-##
-## Check for gperf
-##
-#find_program(GPERF_TOOL NAMES gperf)
-#if(NOT GPERF_TOOL)
-#  message(FATAL_ERROR "gperf required in PATH")
-#else()
-#  message(STATUS "Found gperf: " ${GPERF_TOOL})
-#endif()
+#
+# Check for gperf
+#
+find_program(GPERF_TOOL NAMES gperf)
+if(NOT GPERF_TOOL)
+  message(FATAL_ERROR "gperf required in PATH")
+else()
+  message(STATUS "Found gperf: " ${GPERF_TOOL})
+endif()
 
 #
 # Check if admsXml is available
