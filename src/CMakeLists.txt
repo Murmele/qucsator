@@ -135,47 +135,47 @@ set(QUCS_DOUBLE_SIZE ${DoubleSize})
 configure_file("${qucsator_SOURCE_DIR}/qucs_typedefs.h.cmake"
 	"${qucsator_BINARY_DIR}/qucs_typedefs.h")
 
-##
-## Check for library functions * not all functons seem to be used after defined.
-## TODO check for HAVE_{func}
-##
-#include(CheckFunctionExists)
-#set(REQUIRED_FUNCTIONS
-#    floor
-#    pow
-#    exp
-#    sqrt
-#    log10
-#    log
-#    cos
-#    sin
-#    acos
-#    asin # for real.cpp
-#    tan
-#    atan
-#    sinh
-#    cosh
-#    tanh
-#    fabs
-#    modf
-#    atan2
-#    jn
-#    yn
-#    erf
-#    erfc # for fspecial.cpp
-#    round
-#    trunc
-#    acosh
-#    asinh # for real.cpp
-#    strdup
-#    strerror
-#    strchr) # for compat.h, matvec.cpp, scan_*.cpp
+#
+# Check for library functions * not all functons seem to be used after defined.
+# TODO check for HAVE_{func}
+#
+include(CheckFunctionExists)
+set(REQUIRED_FUNCTIONS
+    floor
+    pow
+    exp
+    sqrt
+    log10
+    log
+    cos
+    sin
+    acos
+    asin # for real.cpp
+    tan
+    atan
+    sinh
+    cosh
+    tanh
+    fabs
+    modf
+    atan2
+    jn
+    yn
+    erf
+    erfc # for fspecial.cpp
+    round
+    trunc
+    acosh
+    asinh # for real.cpp
+    strdup
+    strerror
+    strchr) # for compat.h, matvec.cpp, scan_*.cpp
 
-#foreach(func ${REQUIRED_FUNCTIONS})
-#  string(TOUPPER ${func} FNAME)
-#  check_function_exists(${func} HAVE_${FNAME})
-#  # message(STATUS "${func}  --> ${HAVE_${FNAME}}")
-#endforeach()
+foreach(func ${REQUIRED_FUNCTIONS})
+  string(TOUPPER ${func} FNAME)
+  check_function_exists(${func} HAVE_${FNAME})
+  # message(STATUS "${func}  --> ${HAVE_${FNAME}}")
+endforeach()
 
 ##
 ## Checks for complex classes and functions, as in the Autotools scripts.
