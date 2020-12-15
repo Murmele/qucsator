@@ -136,6 +136,6 @@ class eqnsys
 
 } // namespace qucs
 
-#include "eqnsys.cpp"
+//#include "eqnsys.cpp"
 
 #endif /* __EQNSYS_H__ */
