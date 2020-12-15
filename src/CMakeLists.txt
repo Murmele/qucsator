@@ -372,19 +372,19 @@ list(APPEND PUBLIC_HEADERS
 	${qucsator_BINARY_DIR}/config.h
 	${qucsator_BINARY_DIR}/qucs_typedefs.h)
 
-##
-## Replace 'evaluate::[whatever]' by NULL
-##
-## * evaluate.h (class evaluate): New class implementing the actual evaluation
-##   function (applications) for the equations in Qucs.
-##
-#add_custom_command(
-#  OUTPUT gperfappgen.h
-#  COMMAND
-#    ${SED_TOOL} -e 's/evaluate::[a-zA-Z0-9_]*/NULL/g' <
-#    ${CMAKE_CURRENT_SOURCE_DIR}/applications.h >
-#    ${CMAKE_CURRENT_BINARY_DIR}/gperfappgen.h
-#  DEPENDS ${applications.h})
+#
+# Replace 'evaluate::[whatever]' by NULL
+#
+# * evaluate.h (class evaluate): New class implementing the actual evaluation
+#   function (applications) for the equations in Qucs.
+#
+add_custom_command(
+  OUTPUT gperfappgen.h
+  COMMAND
+    ${SED_TOOL} -e "s/evaluate::[a-zA-Z0-9_]*/NULL/g" <
+    ${CMAKE_CURRENT_SOURCE_DIR}/applications.h >
+    ${CMAKE_CURRENT_BINARY_DIR}/gperfappgen.h
+  DEPENDS ${applications.h})
 
 ##
 ## Compile gperfappgen * used to generate gperf input file (used in qucsator)
@@ -400,19 +400,19 @@ list(APPEND PUBLIC_HEADERS
 #  OUTPUT gperfapphash.gph
 #  COMMAND gperfappgen > ${CMAKE_CURRENT_BINARY_DIR}/gperfapphash.gph
 #  DEPENDS ${gperfappgen})
+#
+# Run gperf, create hash table. * -I, Include the necessary system include files
+# at the beginning of the code. * -m, Perform multiple iterations to minimize
+# generated table. * Replace '{""}' by '{"",0}; (why?)
+#
+add_custom_command(
+  OUTPUT gperfapphash.cpp
+  COMMAND ${GPERF_TOOL} -I -m 8 ${CMAKE_CURRENT_BINARY_DIR}/gperfapphash.gph >
+          temp.gperf
+  COMMAND ${SED_TOOL} -e "s/{""},/{"",0},/g" < temp.gperf >
+          ${CMAKE_CURRENT_BINARY_DIR}/gperfapphash.cpp
+  DEPENDS gperfapphash.gph)
 
-##
-## Run gperf, create hash table. * -I, Include the necessary system include files
-## at the beginning of the code. * -m, Perform multiple iterations to minimize
-## generated table. * Replace '{""}' by '{"",0}; (why?)
-##
-#add_custom_command(
-#  OUTPUT gperfapphash.cpp
-#  COMMAND ${GPERF_TOOL} -I -m 8 ${CMAKE_CURRENT_BINARY_DIR}/gperfapphash.gph >
-#          temp.gperf
-#  COMMAND ${SED_TOOL} -e 's/{""},/{"",0},/g' < temp.gperf >
-#          ${CMAKE_CURRENT_BINARY_DIR}/gperfapphash.cpp
-#  DEPENDS gperfapphash.gph)
 
 ## target <- source (includea) equation.cpp: gperfapphash.cpp
 ##
