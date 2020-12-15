@@ -10,6 +10,22 @@ if (NOT qucsator_SOURCE_DIR)
 	set(qucsator_BINARY_DIR ${qucsator_app_BINARY_DIR})
 endif()
 
+#TODO: do that only if they are not set previously
+# Define to the address where bug reports for this package should be sent.
+set(PACKAGE_BUGREPORT "qucs-bugs@lists.sourceforge.net")
+
+# Define to the full name of this package.
+set(PACKAGE_NAME "qucsator")
+
+# Define to the full name and version of this package.
+set(PACKAGE_STRING "${PACKAGE_NAME} ${PROJECT_VERSION}")
+
+# Define to the one symbol short name of this package.
+set(PACKAGE_TARNAME ${PACKAGE_NAME})
+
+# Define to the home page for this package.
+set(PACKAGE_URL "http://sourceforge.net/projects/qucs/")
+
 find_package(BISON REQUIRED)
 find_package(FLEX REQUIRED)
 
@@ -456,6 +472,13 @@ target_include_directories(libqucsator PRIVATE
 	${qucsator_app_BINARY_DIR} # generated sources are located here
 	${qucsator_app_SOURCE_DIR}
 	${qucsator_app_SOURCE_DIR}/math)
+
+target_compile_definitions(libqucsator PRIVATE
+    PACKAGE_NAME=${PACKAGE_NAME}
+    PACKAGE_BUGREPORT=${PACKAGE_BUGREPORT}
+    PACKAGE_TARNAME=${PACKAGE_TARNAME}
+    PACKAGE_URL=${PACKAGE_URL}
+    )
 
 ## rename the library to let it be libqucsator (not liblibqucsator)
 #set_target_properties(libqucsator PROPERTIES OUTPUT_NAME qucsator)
