@@ -333,16 +333,17 @@ foreach(type ${ParserTypes})
 	  --output=parse_${type}.cpp
 	  ${bisonIn}
 	  DEPENDS ${bisonIn})
-# Create custom Flex
-set(flexIn "${CMAKE_CURRENT_SOURCE_DIR}/scan_${type}.lpp")
-set(flexOut "scan_${type}.cpp")
-add_custom_command(
-	  OUTPUT ${flexOut}
-	COMMAND ${FLEX_EXECUTABLE} --outfile=${flexOut} ${flexIn}
-	DEPENDS ${flexIn})
+    # Create custom Flex
+    set(flexIn "${CMAKE_CURRENT_SOURCE_DIR}/scan_${type}.lpp")
+    set(flexOut "scan_${type}.cpp")
+    add_custom_command(
+	      OUTPUT ${flexOut}
+	    #COMMAND ${FLEX_EXECUTABLE} --outfile=${flexOut} ${flexIn} # not working on windows 10?
+	    COMMAND ${FLEX_EXECUTABLE} -o"${flexOut}" ${flexIn}
+	    DEPENDS ${flexIn})
 
-list(APPEND generated_SRC ${bisonOut})
-list(APPEND generated_SRC ${flexOut})
+    list(APPEND generated_SRC ${bisonOut})
+    list(APPEND generated_SRC ${flexOut})
 endforeach()
 
 
