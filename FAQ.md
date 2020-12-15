@@ -52,4 +52,4 @@ replace '' by ""
   DEPENDS gperfappgen
   COMMENT "Gperfappgen gets executed"
   VERBATIM)
-gets not executed. gperfappgen was created before
+gets not executed. gperfappgen.exe was created before

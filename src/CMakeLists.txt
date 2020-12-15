@@ -400,7 +400,7 @@ add_custom_command(
   OUTPUT gperfapphash.gph
   COMMAND gperfappgen > ${CMAKE_CURRENT_BINARY_DIR}/gperfapphash.gph
   DEPENDS gperfappgen
-  COMMENT "Gperfappgen gets executed"
+  COMMENT "gperfappgen gets executed"
   VERBATIM)
 
 #
@@ -412,7 +412,7 @@ add_custom_command(
   OUTPUT gperfapphash.cpp
   COMMAND ${GPERF_TOOL} -I -m 8 ${CMAKE_CURRENT_BINARY_DIR}/gperfapphash.gph >
           temp.gperf
-  COMMAND ${SED_TOOL} -e "s/{""},/{"",0},/g" < temp.gperf >
+  COMMAND ${SED_TOOL} -e 's/{""},/{"",0},/g' < temp.gperf >
           ${CMAKE_CURRENT_BINARY_DIR}/gperfapphash.cpp
   DEPENDS gperfapphash.gph)
 
