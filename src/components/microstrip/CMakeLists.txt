@@ -14,9 +14,9 @@ endif()
 readVariable(MakeList SRCS MICROSTRIP_SRC)
 readVariable(MakeList HDRS MICROSTRIP_HDRS)
 
-add_library(coreMicrostrip OBJECT ${MICROSTRIP_SRC})
+add_library(coreMicrostrip OBJECT ${MICROSTRIP_SRC} ${MICROSTRIP_HDRS})
 target_include_directories(coreMicrostrip PRIVATE
-	${qucsator_BINARY_DIR} # qucs_typedefs.h
+        ${qucsator_BINARY_DIR} # qucs_typedefs.h and config.h
 	${qucsator_app_SOURCE_DIR}
 	${qucsator_app_SOURCE_DIR}/components
 	${qucsator_app_SOURCE_DIR}/components/devices

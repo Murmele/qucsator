@@ -48,7 +48,7 @@ SRCS = \
 	tridiag.cpp \ 
 	trsolver.cpp
 	tvector.cpp \ 
-	ucs.cpp \ 
+	# ucs.cpp \ Not used in the lib, only in the application it self
 	variable.cpp \ 
 	vector.cpp
 	

@@ -267,7 +267,7 @@ endforeach()
 #      return 0\;
 #    }")
 
-#  file(WRITE ${qucs-core_SOURCE_DIR}/cmake/test_${func}.cpp ${code})
+#  file(WRITE ${qucsator_SOURCE_DIR}/cmake/test_${func}.cpp ${code})
 
 #  string(TOUPPER ${func} FNAME)
 
@@ -275,12 +275,12 @@ endforeach()
 
 #  try_compile(
 #    HAVE_CXX_COMPLEX_${FNAME} ${CMAKE_BINARY_DIR}
-#    ${qucs-core_SOURCE_DIR}/cmake/test_${func}.cpp OUTPUT_VARIABLE TRY_OUT)
+#    ${qucsator_SOURCE_DIR_SOURCE_DIR}/cmake/test_${func}.cpp OUTPUT_VARIABLE TRY_OUT)
 #  if(NOT HAVE_CXX_COMPLEX_${FNAME})
 #    message(STATUS "HAVE_CXX_COMPLEX_${FNAME} failed") # ${TRY_OUT}")
 #  endif()
 
-#  file(REMOVE ${qucs-core_SOURCE_DIR}/cmake/test_${func}.cpp ${code})
+#  file(REMOVE ${qucsator_SOURCE_DIR}/cmake/test_${func}.cpp ${code})
 #endforeach()
 
 ##
@@ -438,7 +438,8 @@ add_subdirectory(converter)
 #
 # Create qucsator
 #
-add_executable(qucsator ucs.cpp ${PUBLIC_HEADERS} ${TEMPLATES})
+#add_executable(qucsator ucs.cpp ${PUBLIC_HEADERS} ${TEMPLATES})
+#target_include_directories(qucsator PRIVATE ${qucsator_SOURCE_DIR})
 
 #
 # Build libqucs as SHARED, dynamic library
@@ -469,8 +470,8 @@ add_library(
 #  ${qucs-core_BINARY_DIR}/src/components # generated verilog/[].core.h
 #)
 target_include_directories(libqucsator PRIVATE
-	${qucsator_BINARY_DIR} # qucs_typedefs.h
-	${qucsator_app_BINARY_DIR} # generated sources are located here
+        ${qucsator_BINARY_DIR}	    # qucs_typedefs.h
+	${qucsator_app_BINARY_DIR}  # generated sources by bison and flex are located here
 	${qucsator_app_SOURCE_DIR}
 	${qucsator_app_SOURCE_DIR}/math)
 
@@ -481,8 +482,9 @@ target_compile_definitions(libqucsator PRIVATE
     PACKAGE_URL=${PACKAGE_URL}
     )
 
-## rename the library to let it be libqucsator (not liblibqucsator)
-#set_target_properties(libqucsator PROPERTIES OUTPUT_NAME qucsator)
+# rename the library to let it be libqucsator (not liblibqucsator).
+# The target name must be unique and qucsator is already used for the application
+set_target_properties(libqucsator PROPERTIES OUTPUT_NAME qucsator)
 
 ##
 ## Create target to handle gperfapp dependency
