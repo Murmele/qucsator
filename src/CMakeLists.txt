@@ -412,8 +412,7 @@ add_custom_command(
   OUTPUT gperfapphash.cpp
   COMMAND ${GPERF_TOOL} -I -m 8 ${CMAKE_CURRENT_BINARY_DIR}/gperfapphash.gph >
           temp.gperf
-  COMMAND ${SED_TOOL} -e 's/{""},/{"",0},/g' < temp.gperf >
-          ${CMAKE_CURRENT_BINARY_DIR}/gperfapphash.cpp
+  COMMAND ${SED_TOOL} -e "s/{\"\"},/{\"\",0},/g" < temp.gperf > ${CMAKE_CURRENT_BINARY_DIR}/gperfapphash.cpp
   DEPENDS gperfapphash.gph)
 
  #target <- source (includea) equation.cpp: gperfapphash.cpp
