@@ -152,6 +152,6 @@ private:
 
 } // namespace qucs
 
-#include "nasolver.cpp"
+//#include "nasolver.cpp"
 
 #endif /* __NASOLVER_H__ */

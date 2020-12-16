@@ -102,6 +102,6 @@ class tmatrix
 
 } // namespace qucs
 
-#include "tmatrix.cpp"
+//#include "tmatrix.cpp"
 
 #endif /* __TMATRIX_H__ */

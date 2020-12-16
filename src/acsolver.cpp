@@ -27,6 +27,7 @@
 #endif
 
 #include <stdio.h>
+#include <string.h>
 #include <cmath>
 
 #include "object.h"
@@ -38,6 +39,10 @@
 #include "analysis.h"
 #include "nasolver.h"
 #include "acsolver.h"
+#include "dataset.h"
+#include "vector.h"
+#include "node.h"
+#include "logging.h"
 
 namespace qucs {
 

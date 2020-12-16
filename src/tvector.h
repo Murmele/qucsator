@@ -156,6 +156,6 @@ class tvector
   
 } // namespace qucs
   
-#include "tvector.cpp"
+//#include "tvector.cpp"
 
 #endif /* __TVECTOR_H__ */
