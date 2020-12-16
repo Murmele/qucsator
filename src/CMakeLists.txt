@@ -298,6 +298,8 @@ endforeach()
 #  endif()
 #endforeach()
 
+set(USE_VERILOG false)
+
 #
 # Configure the header config.h, interpolate above definitions.
 #
@@ -428,8 +430,11 @@ add_subdirectory(components)
 add_subdirectory(components/digital)
 add_subdirectory(components/devices)
 add_subdirectory(components/microstrip)
-#add_subdirectory(interface)
-#add_subdirectory(components/verilog)
+if (USE_VERILOG)
+    message("Verilog used")
+    add_subdirectory(interface)
+    add_subdirectory(components/verilog)
+endif()
 add_subdirectory(math)
 
 ## Qucsconv application

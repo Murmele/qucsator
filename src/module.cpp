@@ -266,6 +266,7 @@ void qucs::module::registerModules (void) {
   REGISTER_CIRCUIT (digisource);
   REGISTER_CIRCUIT (buffer);
 
+#ifdef USE_VERILOG
   REGISTER_CIRCUIT (EKV26MOS);
   REGISTER_CIRCUIT (log_amp);
   REGISTER_CIRCUIT (mod_amp);
@@ -306,6 +307,7 @@ void qucs::module::registerModules (void) {
   REGISTER_CIRCUIT (hpribin4bit);
   REGISTER_CIRCUIT (vcresistor);
   REGISTER_CIRCUIT (ecvs);
+#endif
 
   // analyses
   REGISTER_ANALYSIS (dcsolver);

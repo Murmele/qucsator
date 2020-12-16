@@ -42,7 +42,7 @@ cmake_minimum_required(VERSION 3.16)
 #add_definitions(-DDEBUG)
 
 ## defines nr_double_t
-#add_definitions(-DHAVE_CONFIG_H)
+add_definitions(-DHAVE_CONFIG_H)
 
 ## ~~~
 ## TODO
