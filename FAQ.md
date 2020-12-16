@@ -51,5 +51,15 @@ replace '' by ""
   COMMAND gperfappgen > ${CMAKE_CURRENT_BINARY_DIR}/gperfapphash.gph
   DEPENDS gperfappgen
   COMMENT "Gperfappgen gets executed"
-  VERBATIM)
-gets not executed. gperfappgen.exe was created before
+  VERBATIM
+Solution: It gets not executed, because gperfapphash is not needed anywhere. 
+add_custom_command(
+  OUTPUT gperfapphash.cpp
+  COMMAND ${GPERF_TOOL} -I -m 8 ${CMAKE_CURRENT_BINARY_DIR}/gperfapphash.gph >
+          temp.gperf
+  COMMAND ${SED_TOOL} -e "s/{''},/{'',0},/g" < temp.gperf >
+          ${CMAKE_CURRENT_BINARY_DIR}/gperfapphash.cpp
+  DEPENDS gperfapphash.gph)
+Seeing here, gperfapphash.gph is only needed if gperfapphash.cpp is needed.
+So gperfapphash.cpp must be added as source to the libqucsator library. Then it is needed and so also the Command gets executed.
+Solution commit: d4e6b0d0d8bf5eda6ebdf689407b5af09910c87f
