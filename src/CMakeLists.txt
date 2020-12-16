@@ -453,6 +453,7 @@ add_library(
   libqucsator SHARED
   ${LIBQUCS_SRC}
   ${TEMPLATES}
+  gperfapphash.cpp
   $<TARGET_OBJECTS:coreMath>
   $<TARGET_OBJECTS:coreComponents>
   #$<TARGET_OBJECTS:coreInterface>
