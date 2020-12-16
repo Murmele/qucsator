@@ -389,6 +389,7 @@ add_custom_command(
 set(gperf_SRC gperfappgen.cpp gperfappgen.h)
 add_executable(gperfappgen ${gperf_SRC})
 target_include_directories(gperfappgen PRIVATE ${qucsator_BINARY_DIR}
+                            ${qucsator_app_BINARY_DIR}
                             ${qucsator_app_SOURCE_DIR}
 			    ${qucsator_app_SOURCE_DIR}/math
 			    )
