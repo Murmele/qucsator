@@ -64,7 +64,7 @@ SRCS = \
     vexp.cpp \ 
     vfile.cpp \ 
     vnoise.cpp \ 
-    vpm.cpp
+    vpm.cpp \
     vprobe.cpp \ 
     vpulse.cpp \ 
     vrect.cpp \ 
