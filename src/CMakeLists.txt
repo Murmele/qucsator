@@ -377,6 +377,15 @@ list(APPEND PUBLIC_HEADERS
 # * evaluate.h (class evaluate): New class implementing the actual evaluation
 #   function (applications) for the equations in Qucs.
 #
+if (UNIX)
+ add_custom_command(
+   OUTPUT gperfappgen.h
+   COMMAND
+     ${SED_TOOL} -e 's/evaluate::[a-zA-Z0-9_]*/NULL/g' <
+     ${CMAKE_CURRENT_SOURCE_DIR}/applications.h >
+     ${CMAKE_CURRENT_BINARY_DIR}/gperfappgen.h
+   DEPENDS ${applications.h})
+else()
 add_custom_command(
   OUTPUT gperfappgen.h
   COMMAND
@@ -384,6 +393,7 @@ add_custom_command(
     ${CMAKE_CURRENT_SOURCE_DIR}/applications.h >
     ${CMAKE_CURRENT_BINARY_DIR}/gperfappgen.h
   DEPENDS ${applications.h})
+endif()
 
 #
 # Compile gperfappgen * used to generate gperf input file (used in qucsator)
@@ -411,12 +421,21 @@ add_custom_command(
 # at the beginning of the code. * -m, Perform multiple iterations to minimize
 # generated table. * Replace '{""}' by '{"",0}; (why?)
 #
+if (UNIX)
+ add_custom_command(
+   OUTPUT gperfapphash.cpp
+   COMMAND ${GPERF_TOOL} -I -m 8 ${CMAKE_CURRENT_BINARY_DIR}/gperfapphash.gph >
+           temp.gperf
+   COMMAND ${SED_TOOL} -e 's/{""},/{"",0},/g' < temp.gperf > ${CMAKE_CURRENT_BINARY_DIR}/gperfapphash.cpp
+   DEPENDS gperfapphash.gph)
+else()
 add_custom_command(
   OUTPUT gperfapphash.cpp
   COMMAND ${GPERF_TOOL} -I -m 8 ${CMAKE_CURRENT_BINARY_DIR}/gperfapphash.gph >
           temp.gperf
   COMMAND ${SED_TOOL} -e "s/{\"\"},/{\"\",0},/g" < temp.gperf > ${CMAKE_CURRENT_BINARY_DIR}/gperfapphash.cpp
   DEPENDS gperfapphash.gph)
+endif()
 
  #target <- source (includea) equation.cpp: gperfapphash.cpp
 
