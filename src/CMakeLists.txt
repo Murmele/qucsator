@@ -459,7 +459,8 @@ add_subdirectory(math)
 ## Qucsconv application
 add_subdirectory(converter)
 
-## Linux? set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--export-all-symbols")
+## Linux?
+#set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--export-all-symbols")
 
 #
 # Create qucsator
@@ -502,12 +503,24 @@ target_include_directories(libqucsator PRIVATE
 	${qucsator_app_SOURCE_DIR}
 	${qucsator_app_SOURCE_DIR}/math)
 
-target_compile_definitions(libqucsator PRIVATE
-    PACKAGE_NAME=${PACKAGE_NAME}
-    PACKAGE_BUGREPORT=${PACKAGE_BUGREPORT}
-    PACKAGE_TARNAME=${PACKAGE_TARNAME}
-    PACKAGE_URL=${PACKAGE_URL}
-    )
+# By default, symbols provided by the sublibs that are not used by mainlib (which is all of them in this case)
+# are not used. This changes that.
+#if (WIN32)
+#    set_target_properties(libqucsator PROPERTIES
+#	LINK_FLAGS "/WHOLEARCHIVE"
+#    )
+#elseif (APPLE)
+#    set_target_properties(libqucsator PROPERTIES
+#	LINK_FLAGS "-Wl,-all_load"
+#    )
+#else ()
+#    set_target_properties(libqucsator PROPERTIES
+#	LINK_FLAGS "-Wl,--whole-archive"
+#    )
+#endif ()
+#set_target_properties(libqucsator PROPERTIES
+#    LINK_FLAGS "-Wl,--whole-archive"
+#)
 
 # rename the library to let it be libqucsator (not liblibqucsator).
 # The target name must be unique and qucsator is already used for the application

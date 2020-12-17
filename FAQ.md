@@ -67,4 +67,9 @@ Solution commit: d4e6b0d0d8bf5eda6ebdf689407b5af09910c87f
 ## /usr/bin/ld: CMakeFiles/libqucsator.dir/gperfappgen.cpp.o:(.data.rel.local+0x0): multiple definition of `qucs::eqn::applications'; CMakeFiles/libqucsator.dir/evaluate.cpp.o:(.data.rel+0x0): first defined here
 /usr/bin/ld: CMakeFiles/libqucsator.dir/gperfappgen.cpp.o: in function `qucs::eqn::checker::tag2key(int)':
 
+## [ 52%] Linking CXX shared library libqucsator.dll
+CMakeFiles\libqucsator.dir/objects.a(acsolver.cpp.obj): In function `qucs::acsolver::acsolver()':
+C:/Users/mmarmsoler/Documents/Personal/GIT/qucs/qucsator/src/acsolver.cpp:50: undefined reference to `qucs::nasolver<std::complex<double> >::nasolver()'
+Seems that the math library is not found
+
 
