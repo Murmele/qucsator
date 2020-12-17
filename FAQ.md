@@ -63,3 +63,8 @@ add_custom_command(
 Seeing here, gperfapphash.gph is only needed if gperfapphash.cpp is needed.
 So gperfapphash.cpp must be added as source to the libqucsator library. Then it is needed and so also the Command gets executed.
 Solution commit: d4e6b0d0d8bf5eda6ebdf689407b5af09910c87f
+
+## /usr/bin/ld: CMakeFiles/libqucsator.dir/gperfappgen.cpp.o:(.data.rel.local+0x0): multiple definition of `qucs::eqn::applications'; CMakeFiles/libqucsator.dir/evaluate.cpp.o:(.data.rel+0x0): first defined here
+/usr/bin/ld: CMakeFiles/libqucsator.dir/gperfappgen.cpp.o: in function `qucs::eqn::checker::tag2key(int)':
+
+
