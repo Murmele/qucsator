@@ -32,7 +32,7 @@
 // Array containing all kinds of applications.
 namespace qucs {
 namespace eqn {
-struct qucs::eqn::application_t applications[] = {
+struct application_t applications[] = {
   { "+", TAG_DOUBLE,  evaluate::plus_d, 1, { TAG_DOUBLE  } },
   { "+", TAG_COMPLEX, evaluate::plus_c, 1, { TAG_COMPLEX } },
   { "+", TAG_VECTOR,  evaluate::plus_v, 1, { TAG_VECTOR  } },
