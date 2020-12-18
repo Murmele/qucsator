@@ -484,10 +484,11 @@ coreMicrostrip
 coreDevices
 coreDigital)
 
-target_include_directories(libqucsator PRIVATE
-        ${qucsator_BINARY_DIR}	    # qucs_typedefs.h
-	${qucsator_app_BINARY_DIR}  # generated sources by bison and flex are located here
-	${qucsator_app_SOURCE_DIR}
+target_include_directories(libqucsator
+	PUBLIC ${PROJECT_SOURCE_DIR}
+	PRIVATE
+	${qucsator_BINARY_DIR}	    # qucs_typedefs.h
+		${qucsator_app_BINARY_DIR}  # generated sources by bison and flex are located here
 	)
 
 # By default, symbols provided by the sublibs that are not used by mainlib (which is all of them in this case)
