@@ -26,7 +26,6 @@ set(PACKAGE_TARNAME ${PACKAGE_NAME})
 # Define to the home page for this package.
 set(PACKAGE_URL "http://sourceforge.net/projects/qucs/")
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC" )
 ##
 ## Checks for libraries.
 ##

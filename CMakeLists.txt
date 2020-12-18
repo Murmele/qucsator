@@ -118,7 +118,6 @@ set(PACKAGE_URL "http://sourceforge.net/projects/qucs/")
 set(PACKAGE_VERSION ${PROJECT_VERSION})
 # add compiler definitions/symbols
 add_compile_definitions(PACKAGE_VERSION="${PACKAGE_VERSION}")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC" )
 
 ##
 ## Avoid source tree pollution
@@ -271,14 +270,14 @@ endif()
 #  message(FATAL_ERROR "Your C++ compiler does not support C++11.")
 #endif()
 
-##
-## Set position independed code PIC
-##
-#if(UNIX AND NOT APPLE)
-#  if(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
-#    set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-#  endif()
-#endif()
+#
+# Set position independed code PIC
+#
+if(UNIX AND NOT APPLE)
+  if(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
+	  set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+endif()
+endif()
 
 #
 # Go look for stuff to build/install...
