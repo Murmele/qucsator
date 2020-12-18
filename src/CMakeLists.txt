@@ -488,7 +488,7 @@ target_include_directories(libqucsator
 	PUBLIC ${PROJECT_SOURCE_DIR}
 	PRIVATE
 	${qucsator_BINARY_DIR}	    # qucs_typedefs.h
-		${qucsator_app_BINARY_DIR}  # generated sources by bison and flex are located here
+	${qucsator_app_BINARY_DIR}  # generated sources by bison and flex are located here
 	)
 
 # By default, symbols provided by the sublibs that are not used by mainlib (which is all of them in this case)
@@ -517,7 +517,7 @@ set_target_properties(libqucsator PROPERTIES OUTPUT_NAME qucsator)
 # Create target to handle gperfapp dependency
 #
 add_custom_target(equation DEPENDS ${qucsator_app_BINARY_DIR}/gperfapphash.cpp
-	equation.cpp)
+	${PROJECT_SOURCE_DIR}/equation.cpp)
 add_dependencies(libqucsator equation)
 
 
@@ -526,9 +526,12 @@ add_dependencies(libqucsator equation)
 #
 add_executable(qucsator ucs.cpp)
 target_include_directories(qucsator PRIVATE ${qucsator_SOURCE_DIR}
-	${qucsator_BINARY_DIR})
-# DL libs needed for opening a shared library
-target_link_libraries(qucsator libqucsator coreMath coreComponents ${CMAKE_DL_LIBS})
+	${qucsator_BINARY_DIR}
+	${qucsator_app_SOURCE_DIR}/components # TODO: why this is needed?
+	${qucsator_app_SOURCE_DIR}/math # TODO: why this is needed?
+	)
+## DL libs needed for opening a shared library
+target_link_libraries(qucsator libqucsator ${CMAKE_DL_LIBS})
 
 ##
 ## Handle install
