@@ -25,8 +25,6 @@ set(PACKAGE_TARNAME ${PACKAGE_NAME})
 
 # Define to the home page for this package.
 set(PACKAGE_URL "http://sourceforge.net/projects/qucs/")
-
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC" )
 ##
 ## Checks for libraries.
 ##
@@ -460,7 +458,7 @@ add_subdirectory(math)
 ## Qucsconv application
 #add_subdirectory(converter)
 
-## Linux?
+### Linux?
 #set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--export-all-symbols")
 
 #
@@ -503,9 +501,9 @@ target_include_directories(libqucsator PRIVATE
 #	LINK_FLAGS "-Wl,--whole-archive"
 #    )
 #endif ()
-#set_target_properties(libqucsator PROPERTIES
-#    LINK_FLAGS "-Wl,--whole-archive"
-#)
+set_target_properties(libqucsator PROPERTIES
+    LINK_FLAGS "-Wl,--whole-archive"
+)
 # rename the library to let it be libqucsator (not liblibqucsator).
 # The target name must be unique and qucsator is already used for the application
 set_target_properties(libqucsator PROPERTIES OUTPUT_NAME qucsator)
@@ -526,7 +524,7 @@ target_include_directories(qucsator PRIVATE ${qucsator_SOURCE_DIR}
                                             ${qucsator_BINARY_DIR}
                                             ${qucsator_app_SOURCE_DIR}
                                             ${qucsator_app_SOURCE_DIR}/math)
-target_link_libraries(qucsator libqucsator) # ${CMAKE_DL_LIBS})
+target_link_libraries(qucsator libqucsator ${CMAKE_DL_LIBS})
 
 ##
 ## Handle install
