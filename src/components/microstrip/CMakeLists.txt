@@ -16,7 +16,7 @@ readVariable(MakeList HDRS MICROSTRIP_HDRS)
 
 add_library(coreMicrostrip OBJECT ${MICROSTRIP_SRC})
 target_include_directories(coreMicrostrip
-	PUBLIC ${PROJECT_SOURCE_DIR} # This folder
+	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} # This folder
 	PRIVATE
 	${qucsator_BINARY_DIR} # qucs_typedefs.h and config.h
 	${qucsator_app_SOURCE_DIR}

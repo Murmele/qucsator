@@ -8,7 +8,7 @@ readVariable(MakeList HDRS COMPONENTS_HDRS)
 
 add_library(coreComponents OBJECT ${COMPONENTS_SRC})
 target_include_directories(coreComponents
-	PUBLIC ${PROJECT_SOURCE_DIR} # This folder
+	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} # This folder
 	PRIVATE ${qucsator_BINARY_DIR} # config.h and qucs_typedef.h
         ${qucsator_app_SOURCE_DIR}
 		${qucsator_app_SOURCE_DIR}/math

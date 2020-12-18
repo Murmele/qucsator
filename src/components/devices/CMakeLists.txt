@@ -16,7 +16,7 @@ readVariable(MakeList HDRS DEVICES_HEADERS)
 
 add_library(coreDevices OBJECT ${DEVICES_SRC})
 target_include_directories(coreDevices
-	PUBLIC ${PROJECT_SOURCE_DIR} # This folder
+	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} # This folder
 	PRIVATE
 	${qucsator_BINARY_DIR}
 	${qucsator_app_SOURCE_DIR}

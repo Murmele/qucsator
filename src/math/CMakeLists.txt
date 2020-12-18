@@ -17,7 +17,7 @@ readVariable(MakeList HDRS HEADERS)
 add_library(coreMath OBJECT ${MATH_SRC})
 # ${qucsator_BINARY_DIR} must be added, because from the qucsator/qucs_typedefs.h.cmake the header is created and this one is stored inside the Binary directory
 # constants.h from qucs/src is needed in the math library. So the path must also be added
-target_include_directories(coreMath PUBLIC ${PROJECT_SOURCE_DIR})
+target_include_directories(coreMath PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(coreMath PRIVATE
                            ${qucsator_app_SOURCE_DIR}
                            ${qucsator_BINARY_DIR} # config.h and qucs_typedefs.h
