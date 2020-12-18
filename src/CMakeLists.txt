@@ -475,7 +475,7 @@ add_library(
   gperfapphash.cpp
 
   )
-target_link_libraries(libqucsator PRIVATE
+target_link_libraries(libqucsator PUBLIC
 	coreMath
 	coreComponents
 #	coreInterface
@@ -527,8 +527,6 @@ add_dependencies(libqucsator equation)
 add_executable(qucsator ucs.cpp)
 target_include_directories(qucsator PRIVATE ${qucsator_SOURCE_DIR}
 	${qucsator_BINARY_DIR}
-	${qucsator_app_SOURCE_DIR}/components # TODO: why this is needed?
-	${qucsator_app_SOURCE_DIR}/math # TODO: why this is needed?
 	)
 ## DL libs needed for opening a shared library
 target_link_libraries(qucsator libqucsator ${CMAKE_DL_LIBS})
