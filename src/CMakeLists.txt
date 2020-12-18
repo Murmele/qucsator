@@ -472,22 +472,22 @@ add_subdirectory(math)
 add_library(
   libqucsator SHARED
   ${LIBQUCS_SRC}
-  ${TEMPLATES}
   gperfapphash.cpp
-  $<TARGET_OBJECTS:coreMath>
-#  $<TARGET_OBJECTS:coreComponents>
-  #$<TARGET_OBJECTS:coreInterface>
-  #$<TARGET_OBJECTS:coreVerilog>
-#  $<TARGET_OBJECTS:coreMicrostrip>
-#  $<TARGET_OBJECTS:coreDevices>
-#  $<TARGET_OBJECTS:coreDigital>
+
   )
+target_link_libraries(libqucsator PRIVATE
+	coreMath
+	coreComponents
+#	coreInterface
+#	coreVerilog
+coreMicrostrip
+coreDevices
+coreDigital)
 
 target_include_directories(libqucsator PRIVATE
         ${qucsator_BINARY_DIR}	    # qucs_typedefs.h
 	${qucsator_app_BINARY_DIR}  # generated sources by bison and flex are located here
 	${qucsator_app_SOURCE_DIR}
-	#${qucsator_app_SOURCE_DIR}/math
 	)
 
 # By default, symbols provided by the sublibs that are not used by mainlib (which is all of them in this case)
@@ -512,24 +512,22 @@ target_include_directories(libqucsator PRIVATE
 # The target name must be unique and qucsator is already used for the application
 set_target_properties(libqucsator PROPERTIES OUTPUT_NAME qucsator)
 
-##
-## Create target to handle gperfapp dependency
-##
-#add_custom_target(equation DEPENDS ${qucsator_app_BINARY_DIR}/gperfapphash.cpp
-#                                   equation.cpp)
-#add_dependencies(libqucsator equation)
+#
+# Create target to handle gperfapp dependency
+#
+add_custom_target(equation DEPENDS ${qucsator_app_BINARY_DIR}/gperfapphash.cpp
+	equation.cpp)
+add_dependencies(libqucsator equation)
 
 
-##
-## Create qucsator application
-##
-#add_executable(qucsator ucs.cpp ${PUBLIC_HEADERS} ${TEMPLATES})
-#target_include_directories(qucsator PRIVATE ${qucsator_SOURCE_DIR}
-#                                            ${qucsator_BINARY_DIR}
-#                                            ${qucsator_app_SOURCE_DIR}
-#                                            ${qucsator_app_SOURCE_DIR}/math)
-## DL libs needed for opening a shared library
-#target_link_libraries(qucsator libqucsator ${CMAKE_DL_LIBS})
+#
+# Create qucsator application
+#
+add_executable(qucsator ucs.cpp)
+target_include_directories(qucsator PRIVATE ${qucsator_SOURCE_DIR}
+	${qucsator_BINARY_DIR})
+# DL libs needed for opening a shared library
+target_link_libraries(qucsator libqucsator coreMath coreComponents ${CMAKE_DL_LIBS})
 
 ##
 ## Handle install

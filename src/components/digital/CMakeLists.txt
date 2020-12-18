@@ -16,7 +16,9 @@ readVariable(MakeList HDRS DIGITAL_HEADERS)
 
 # TODO: why the current folder is not needed?
 add_library(coreDigital OBJECT ${DIGITAL_SRC})
-target_include_directories(coreDigital PUBLIC
+target_include_directories(coreDigital
+	PUBLIC ${PROJECT_SOURCE_DIR} # This folder
+	PRIVATE
 	${qucsator_BINARY_DIR}
 	${qucsator_app_SOURCE_DIR}
 	${qucsator_app_SOURCE_DIR}/components

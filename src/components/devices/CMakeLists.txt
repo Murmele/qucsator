@@ -15,7 +15,9 @@ readVariable(MakeList SRCS DEVICES_SRC)
 readVariable(MakeList HDRS DEVICES_HEADERS)
 
 add_library(coreDevices OBJECT ${DEVICES_SRC})
-target_include_directories(coreDevices PUBLIC
+target_include_directories(coreDevices
+	PUBLIC ${PROJECT_SOURCE_DIR} # This folder
+	PRIVATE
 	${qucsator_BINARY_DIR}
 	${qucsator_app_SOURCE_DIR}
 	${qucsator_app_SOURCE_DIR}/components
