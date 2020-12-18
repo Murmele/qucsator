@@ -36,8 +36,8 @@
 #include <fstream>
 
 #include "check_netlist.h"
-#include "components/component.h"
-#include "components/components.h"
+#include "component.h"
+#include "components.h"
 #include "dataset.h"
 #include "environment.h"
 #include "equation.h"
