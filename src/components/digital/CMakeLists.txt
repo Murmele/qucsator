@@ -12,11 +12,11 @@ if ((NOT qucsator_BINARY_DIR) OR (NOT qucsator_app_SOURCE_DIR) )
 endif()
 
 readVariable(MakeList SRCS DIGITAL_SRC)
-readVariable(MakeList HDRS DIGITAL_HEADERS)
 
 # TODO: why the current folder is not needed?
 add_library(coreDigital OBJECT ${DIGITAL_SRC})
 target_include_directories(coreDigital PUBLIC
+        ${digital_SOURCE_DIR}
 	${qucsator_BINARY_DIR}
 	${qucsator_app_SOURCE_DIR}
 	${qucsator_app_SOURCE_DIR}/components

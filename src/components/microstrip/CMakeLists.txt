@@ -14,13 +14,17 @@ endif()
 readVariable(MakeList SRCS MICROSTRIP_SRC)
 readVariable(MakeList HDRS MICROSTRIP_HDRS)
 
-add_library(coreMicrostrip OBJECT ${MICROSTRIP_SRC} ${MICROSTRIP_HDRS})
-target_include_directories(coreMicrostrip PRIVATE
+add_library(coreMicrostrip OBJECT ${MICROSTRIP_SRC})
+target_include_directories(coreMicrostrip PUBLIC
+        ${microstrip_SOURCE}
         ${qucsator_BINARY_DIR} # qucs_typedefs.h and config.h
 	${qucsator_app_SOURCE_DIR}
 	${qucsator_app_SOURCE_DIR}/components
 	${qucsator_app_SOURCE_DIR}/components/devices
 	${qucsator_app_SOURCE_DIR}/math)
 
+    # TODO: which one is better?
 install(FILES ${MICROSTRIP_HDRS} DESTINATION include/qucsator)
+install(TARGETS coreMicrostrip
+    PUBLIC_HEADER DESTINATION include/qucsator)
 

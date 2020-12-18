@@ -16,6 +16,7 @@ readVariable(MakeList HDRS DEVICES_HEADERS)
 
 add_library(coreDevices OBJECT ${DEVICES_SRC})
 target_include_directories(coreDevices PUBLIC
+        ${devices_SOURCE_DIR}
 	${qucsator_BINARY_DIR}
 	${qucsator_app_SOURCE_DIR}
 	${qucsator_app_SOURCE_DIR}/components
