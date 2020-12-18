@@ -118,6 +118,7 @@ set(PACKAGE_URL "http://sourceforge.net/projects/qucs/")
 set(PACKAGE_VERSION ${PROJECT_VERSION})
 # add compiler definitions/symbols
 add_compile_definitions(PACKAGE_VERSION="${PACKAGE_VERSION}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC" )
 
 ##
 ## Avoid source tree pollution
@@ -221,33 +222,33 @@ message(STATUS "Found admsXml: " ${ADMSXML})
 #  set(CMAKE_MACOSX_RPATH TRUE)
 #endif()
 
-## CMake adds --enable-all-exports on Cygwin (since Cygwin is supposed to be
-## UNIX-like), but we need to add it explicitly for a native windows build with
-## the MinGW tools.
-#if(WIN32)
-#  set(CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS
-#      "-shared -Wl,--export-all-symbols -Wl,--enable-auto-import")
-#  set(CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS
-#      "-shared -Wl,--export-all-symbols -Wl,--enable-auto-import")
-#  set(CMAKE_EXE_LINKER_FLAGS "-Wl,--enable-auto-import")
-#endif()
+# CMake adds --enable-all-exports on Cygwin (since Cygwin is supposed to be
+# UNIX-like), but we need to add it explicitly for a native windows build with
+# the MinGW tools.
+if(WIN32)
+  set(CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS
+      "-shared -Wl,--export-all-symbols -Wl,--enable-auto-import")
+  set(CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS
+      "-shared -Wl,--export-all-symbols -Wl,--enable-auto-import")
+  set(CMAKE_EXE_LINKER_FLAGS "-Wl,--enable-auto-import")
+endif()
 
-## ~~~
-## indiscriminate copy/paste from:
-## http://stackoverflow.com/questions/10984442/how-to-detect-c11-support-of-a-compiler-with-cmake/20165220#20165220
+# ~~~
+# indiscriminate copy/paste from:
+# http://stackoverflow.com/questions/10984442/how-to-detect-c11-support-of-a-compiler-with-cmake/20165220#20165220
 
-## Initialize CXXFLAGS.
+# Initialize CXXFLAGS.
 
-## \todo fix headers and use standard C++ methods * strdup is not C or C++
-## standart, it is POSIX adding -fpermissive let it compile with a ton of
-## warnings * problem with non-starndart _stricmp using -stdr=c++0x set g++ into
-## strict ANSY, relax that with -U__STRICT_ANSI__. Could use -std=gnu++0x
-## ~~~
-#if(WIN32)
-#  set(CMAKE_CXX_FLAGS "-Wall -std=c++0x -fpermissive -U__STRICT_ANSI__")
-#else()
-#  set(CMAKE_CXX_FLAGS "-Wall -std=c++11")
-#endif()
+# \todo fix headers and use standard C++ methods * strdup is not C or C++
+# standart, it is POSIX adding -fpermissive let it compile with a ton of
+# warnings * problem with non-starndart _stricmp using -stdr=c++0x set g++ into
+# strict ANSY, relax that with -U__STRICT_ANSI__. Could use -std=gnu++0x
+# ~~~
+if(WIN32)
+  set(CMAKE_CXX_FLAGS "-Wall -std=c++0x -fpermissive -U__STRICT_ANSI__")
+else()
+  set(CMAKE_CXX_FLAGS "-Wall -std=c++11")
+endif()
 
 ## indiscriminate copy/paste from:
 ## http://stackoverflow.com/questions/10984442/how-to-detect-c11-support-of-a-

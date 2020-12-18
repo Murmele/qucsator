@@ -26,6 +26,7 @@ set(PACKAGE_TARNAME ${PACKAGE_NAME})
 # Define to the home page for this package.
 set(PACKAGE_URL "http://sourceforge.net/projects/qucs/")
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC" )
 ##
 ## Checks for libraries.
 ##
@@ -457,16 +458,10 @@ endif()
 add_subdirectory(math)
 
 ## Qucsconv application
-add_subdirectory(converter)
+#add_subdirectory(converter)
 
 ## Linux?
 #set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--export-all-symbols")
-
-#
-# Create qucsator
-#
-#add_executable(qucsator ucs.cpp ${PUBLIC_HEADERS} ${TEMPLATES})
-#target_include_directories(qucsator PRIVATE ${qucsator_SOURCE_DIR})
 
 #
 # Build libqucs as SHARED, dynamic library
@@ -487,16 +482,6 @@ add_library(
   $<TARGET_OBJECTS:coreDevices>
   $<TARGET_OBJECTS:coreDigital>)
 
-#include_directories(
-#  ${qucs-core_SOURCE_DIR} # generated config.h
-#  ${qucs-core_SOURCE_DIR}/src/math # precision.h
-#  ${qucs-core_SOURCE_DIR}/src/ # compat.h
-#  ${qucs-core_SOURCE_DIR}/src/components # microstrip/substrate.h
-#  ${qucs-core_SOURCE_DIR}/src/interface
-#  ${qucs-core_BINARY_DIR} # cmake generated config.h
-#  ${qucs-core_BINARY_DIR}/src # cmake generated gperfapphash.h
-#  ${qucs-core_BINARY_DIR}/src/components # generated verilog/[].core.h
-#)
 target_include_directories(libqucsator PRIVATE
         ${qucsator_BINARY_DIR}	    # qucs_typedefs.h
 	${qucsator_app_BINARY_DIR}  # generated sources by bison and flex are located here
@@ -521,22 +506,27 @@ target_include_directories(libqucsator PRIVATE
 #set_target_properties(libqucsator PROPERTIES
 #    LINK_FLAGS "-Wl,--whole-archive"
 #)
-
 # rename the library to let it be libqucsator (not liblibqucsator).
 # The target name must be unique and qucsator is already used for the application
 set_target_properties(libqucsator PROPERTIES OUTPUT_NAME qucsator)
 
-##
-## Create target to handle gperfapp dependency
-##
-#add_custom_target(equation DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gperfapphash.cpp
-#                                   equation.cpp)
-#add_dependencies(libqucsator equation)
+#
+# Create target to handle gperfapp dependency
+#
+add_custom_target(equation DEPENDS ${qucsator_app_BINARY_DIR}/gperfapphash.cpp
+                                   equation.cpp)
+add_dependencies(libqucsator equation)
 
-##
-## Link qucsator and libqucsator
-##
-#target_link_libraries(qucsator libqucsator ${CMAKE_DL_LIBS})
+
+#
+# Create qucsator application
+#
+add_executable(qucsator ucs.cpp ${PUBLIC_HEADERS} ${TEMPLATES})
+target_include_directories(qucsator PRIVATE ${qucsator_SOURCE_DIR}
+                                            ${qucsator_BINARY_DIR}
+                                            ${qucsator_app_SOURCE_DIR}
+                                            ${qucsator_app_SOURCE_DIR}/math)
+target_link_libraries(qucsator libqucsator) # ${CMAKE_DL_LIBS})
 
 ##
 ## Handle install
@@ -551,4 +541,4 @@ set_target_properties(libqucsator PROPERTIES OUTPUT_NAME qucsator)
 #  ARCHIVE DESTINATION lib COMPONENT devel
 #  LIBRARY DESTINATION lib COMPONENT library)
 
-#install(FILES ${PUBLIC_HEADERS} DESTINATION include/qucs-core)
+#install(FILES ${PUBLIC_HEADERS} DESTINATION include/qucsator)
