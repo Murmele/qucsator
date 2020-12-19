@@ -481,7 +481,9 @@ target_link_libraries(libqucsator PUBLIC
 #	coreVerilog
 coreMicrostrip
 coreDevices
-coreDigital)
+coreDigital
+${CMAKE_DL_LIBS} # for dlerror(), dlopen() ...
+)
 
 target_include_directories(libqucsator
 	PUBLIC ${PROJECT_SOURCE_DIR}
