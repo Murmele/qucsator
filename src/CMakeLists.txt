@@ -504,7 +504,7 @@ target_include_directories(libqucsator
 	)
 
 get_target_property(MY_SOURCES libqucsator SOURCES)
-message(FATAL_ERROR "${MY_SOURCES}")
+#message(FATAL_ERROR "${MY_SOURCES}")
 
 # By default, symbols provided by the sublibs that are not used by mainlib (which is all of them in this case)
 # are not used. This changes that.
