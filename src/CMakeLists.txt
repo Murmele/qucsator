@@ -298,7 +298,7 @@ endforeach()
 #  endif()
 #endforeach()
 
-set(USE_VERILOG false)
+set(USE_VERILOG true)
 
 #
 # Configure the header config.h, interpolate above definitions.
@@ -451,13 +451,13 @@ add_subdirectory(components/devices)
 add_subdirectory(components/microstrip)
 if (USE_VERILOG)
     message("Verilog used")
-    add_subdirectory(interface)
-    add_subdirectory(components/verilog)
+	add_subdirectory(interface)
+	add_subdirectory(components/verilog)
 endif()
 add_subdirectory(math)
 
-## Qucsconv application
-#add_subdirectory(converter)
+# Qucsconv application
+add_subdirectory(converter)
 
 ## Linux?
 #set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--export-all-symbols")
