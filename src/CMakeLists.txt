@@ -298,7 +298,7 @@ endforeach()
 #  endif()
 #endforeach()
 
-set(USE_VERILOG false)
+set(USE_VERILOG true)
 
 #
 # Configure the header config.h, interpolate above definitions.
@@ -451,13 +451,13 @@ add_subdirectory(components/devices)
 add_subdirectory(components/microstrip)
 if (USE_VERILOG)
     message("Verilog used")
-    add_subdirectory(interface)
-    add_subdirectory(components/verilog)
+	add_subdirectory(interface)
+	add_subdirectory(components/verilog)
 endif()
 add_subdirectory(math)
 
-## Qucsconv application
-#add_subdirectory(converter)
+# Qucsconv application
+add_subdirectory(converter)
 
 ## Linux?
 #set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--export-all-symbols")
@@ -475,6 +475,8 @@ add_library(
   $<TARGET_OBJECTS:coreMicrostrip>
   $<TARGET_OBJECTS:coreDevices>
   $<TARGET_OBJECTS:coreDigital>
+  $<TARGET_OBJECTS:coreVerilog>
+  $<TARGET_OBJECTS:coreInterface>
   gperfapphash.cpp
   $<TARGET_OBJECTS:coreMath>
   )
@@ -497,7 +499,10 @@ target_include_directories(libqucsator
 	${CMAKE_CURRENT_SOURCE_DIR}/components
 	${CMAKE_CURRENT_SOURCE_DIR}/components/microstrip
 	${CMAKE_CURRENT_SOURCE_DIR}/components/devices
+	${CMAKE_CURRENT_SOURCE_DIR}/components/verilog
 	${CMAKE_CURRENT_SOURCE_DIR}/components/digital
+	${CMAKE_CURRENT_SOURCE_DIR}/interface
+	${qucsator_app_BINARY_DIR}/components # verilog/[].core.h
 	${qucsator_app_BINARY_DIR}  # generated sources by bison and flex are located here
 	PRIVATE
 	${qucsator_BINARY_DIR}	    # qucs_typedefs.h
