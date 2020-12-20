@@ -16,8 +16,15 @@ readVariable(MakeList SRCS INTERFACE_SRC)
 readVariable(MakeList HDRS HEADERS)
 
 add_library(coreInterface OBJECT ${INTERFACE_SRC})
-target_include_directories(coreInterface PUBLIC
-
+target_include_directories(coreInterface
+	PUBLIC
+	${qucsator_app_BINARY_DIR}/components  # verilog/[].core.h
+	${CMAKE_CURRENT_SOURCE_DIR}
+	PRIVATE
+	${qucsator_BINARY_DIR} # config.h
+	${qucsator_app_SOURCE_DIR} # compat.h
+	${qucsator_app_SOURCE_DIR}/math # precision.h
+	${qucsator_app_SOURCE_DIR}/components # component.h
 	)
 
 # coreVerilog is located in components/verilog
