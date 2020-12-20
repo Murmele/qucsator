@@ -26,6 +26,42 @@ set(PACKAGE_TARNAME ${PACKAGE_NAME})
 # Define to the home page for this package.
 set(PACKAGE_URL "http://sourceforge.net/projects/qucs/")
 
+find_program(SED_TOOL NAMES sed REQUIRED)
+message(STATUS "Found sed: " ${SED_TOOL})
+
+find_program(GPERF_TOOL NAMES gperf REQUIRED)
+message(STATUS "Found gperf: " ${GPERF_TOOL})
+
+#
+# Need Flex
+#
+find_package(FLEX 2.5.4 REQUIRED)
+
+# ~~~
+# Need Bison
+#
+# This is a HACK to get arround a PATH issue with Qt Creator on OSX.
+# It seams impossible to pass a custom PATH to Qt Creator on OSX, ie, cannot prepend `/usr/local/bin/` for intance.
+# The FIND_PACKAGE fails. For now we provide a fallback with a custom FIND_PROGRAM.
+# The variable BISON_DIR is also available.
+# ~~~
+if(WIN32 OR (UNIX AND NOT APPLE))
+  find_package(BISON 2.4 REQUIRED)
+elseif(APPLE) # OSX. TODO: check if still relevant
+  # use -DBISON_DIR=/path/ to provide the path to bison
+  find_program(
+	  BISON_EXECUTABLE bison
+	PATHS /usr/local/bin/ /opt/local/bin/ /usr/bin ${BISON_DIR}
+	DOC "bison path"
+	NO_DEFAULT_PATH)
+if(BISON_EXECUTABLE)
+	  message(STATUS "Found bison: " ${BISON_EXECUTABLE})
+else()
+	  message(
+		FATAL_ERROR "Unable to find bison. Try to provide -DBISON_DIR=[path]")
+endif()
+endif()
+
 ##
 ## Checks for libraries.
 ##
