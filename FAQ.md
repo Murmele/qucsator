@@ -72,5 +72,21 @@ solution: some source files from the headers removed
 CMakeFiles\libqucsator.dir/objects.a(acsolver.cpp.obj): In function `qucs::acsolver::acsolver()':
 C:/Users/mmarmsoler/Documents/Personal/GIT/qucs/qucsator/src/acsolver.cpp:50: undefined reference to `qucs::nasolver<std::complex<double> >::nasolver()'
 
+## Header missing from a target included with add_subdirectory
+Do not do: add_library(libqucsator SHARED $<TARGET_OBJECTS:includedObject>), because it adds only the source files. So the headers must also be included into libqucsator.
+Better: add_library(libqucsator SHARED <Sourcefiles for this lib>)
+target_link_libraries(libqucsator includedObject)
+
+## /usr/bin/ld: /usr/bin/ld: DWARF error: could not find variable specification at offset a43a components/CMakeFiles/coreComponents.dir/biastee.cpp.o: in function `biastee::calcTR(double)':
+at commit: c75f49c12e9c6656134f28dad0b3207a4719e574
+removed coreMath, coreComponents and so on from the link libraries command for the qucsator and added the include paths to the headers
+DO NOT add object targets to a target when they are already included into the shared library. Makes no sense
+
+## :-1: error: libqucsator.so: undefined reference to `qucs::nasolver<double>::nasolver(qucs::nasolver<double>&)'
+During link of the libqucsator to the qucsator application
+problem commit: 1c2e56d5ac05cdea1adbd2fdc5612af489f1e187
+
+
+
 
 
