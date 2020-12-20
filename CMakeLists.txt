@@ -33,9 +33,9 @@ project(qucsator CXX)
 cmake_minimum_required(VERSION 3.16)
 
 # ignore the project() managed VERSION (new in CMake 3.0)
-#if(POLICY CMP0048)
-#  cmake_policy(SET CMP0048 OLD)
-#endif(POLICY CMP0048)
+if(POLICY CMP0048)
+  cmake_policy(SET CMP0048 OLD)
+endif(POLICY CMP0048)
 
 
 ## otherwise qucsator cannot generate qucsdefs.h
@@ -70,19 +70,20 @@ add_definitions(-DHAVE_CONFIG_H)
 ##
 ## ~~~
 
-## use top VERSION file
-#file(STRINGS ${qucs-core_SOURCE_DIR}/VERSION QUCS_VERSION)
-#message(STATUS "Configuring ${PROJECT_NAME}: VERSION ${QUCS_VERSION}")
+# use top VERSION file
+file(STRINGS ${qucsator_SOURCE_DIR}/VERSION QUCS_VERSION)
+message(STATUS "Configuring ${PROJECT_NAME}: VERSION ${QUCS_VERSION}")
 
+# directed to config.h, so these definitions are available in the code
 set(PROJECT_VERSION "${QUCS_VERSION}")
 set(PROJECT_VENDOR "Qucs team. This program is licensed under the GNU GPL")
 set(QUCS_URL "https://sf.net/p/qucs")
 set(QUCS_BUGREPORT "qucs-bugs@lists.sourceforge.net")
 
-#configure_file(${CMAKE_CURRENT_SOURCE_DIR}/doc/qucsconv.1.cmake.in
-#               ${CMAKE_CURRENT_SOURCE_DIR}/doc/qucsconv.1)
-#configure_file(${CMAKE_CURRENT_SOURCE_DIR}/doc/qucsator.1.cmake.in
-#               ${CMAKE_CURRENT_SOURCE_DIR}/doc/qucsator.1)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/doc/qucsconv.1.cmake.in
+	${CMAKE_CURRENT_SOURCE_DIR}/doc/qucsconv.1)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/doc/qucsator.1.cmake.in
+	${CMAKE_CURRENT_SOURCE_DIR}/doc/qucsator.1)
 
 ## use last git commit hash along the version
 #set(GIT unknown)
@@ -119,23 +120,23 @@ set(PACKAGE_VERSION ${PROJECT_VERSION})
 # add compiler definitions/symbols
 add_compile_definitions(PACKAGE_VERSION="${PACKAGE_VERSION}")
 
-##
-## Avoid source tree pollution
-##
-#if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
-#  message(
-#    FATAL_ERROR
-#      "\nIn-source builds are not permitted.
-#                       Make a separate folder for building:
-#                       $ mkdir build; cd build; cmake ..
-#                       Before that, remove the files already created:
-#                       $ rm -rf CMakeCache.txt CMakeFiles")
-#endif()
+#
+# Avoid source tree pollution
+#
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
+  message(
+	  FATAL_ERROR
+	"\nIn-source builds are not permitted.
+	  Make a separate folder for building:
+	  $ mkdir build; cd build; cmake ..
+	  Before that, remove the files already created:
+	  $ rm -rf CMakeCache.txt CMakeFiles")
+endif()
 
-##
-## Set locations of CMake modules, used on tests, find,...
-##
-#set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules/")
+#
+# Set locations of CMake modules, used on tests, find,...
+#
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules/")
 
 #
 # Need Flex
