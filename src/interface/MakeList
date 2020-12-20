@@ -1,12 +1,12 @@
 SRCS = \
 	e_trsolver.cpp \
-	mextrsolver.cpp \
-	m_trsolver_interface_mex.cpp \
+	#mextrsolver.cpp \ # for these files mex.h is needed, which gets installed with octave. So make somehow a dependency to it
+	#m_trsolver_interface_mex.cpp \
 	qucs_interface.cpp
 	
 HDRS = \
 	e_trsolver.h \
-	mextrsolver.h \
+	#mextrsolver.h \
 	qucs_interface.h
 	
 OCTAVE_FILES = \
