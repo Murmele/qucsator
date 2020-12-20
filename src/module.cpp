@@ -316,7 +316,9 @@ void qucs::module::registerModules (void) {
   REGISTER_ANALYSIS (trsolver);
   REGISTER_ANALYSIS (hbsolver);
   REGISTER_ANALYSIS (parasweep);
-  REGISTER_ANALYSIS (e_trsolver);
+  #ifdef USE_VERILOG
+    REGISTER_ANALYSIS (e_trsolver);
+  #endif
 }
 
 // Global module unregistration.
