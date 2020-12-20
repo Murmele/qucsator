@@ -38,6 +38,8 @@ endforeach()
 
 add_library(coreVerilog OBJECT ${gen_SRC})
 target_include_directories(coreVerilog
+	PUBLIC
+	${CMAKE_CURRENT_BINARY_DIR}
 	PRIVATE
 	${qucsator_BINARY_DIR} # config.h
 	${qucsator_app_SOURCE_DIR} # compat.h
