@@ -58,6 +58,10 @@ add_dependencies(qucsconv defs)
 
 # TODO: why CMAKE_DL_LIBS needed?
 target_link_libraries(qucsconv libqucsator ${CMAKE_DL_LIBS})
+target_include_directories(qucsconv
+	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
+	${CMAKE_CURRENT_BINARY_DIR}
+	PRIVATE ${qucsator_BINARY_DIR})
 
 #
 # Handle installation
