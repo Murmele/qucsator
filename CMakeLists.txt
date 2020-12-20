@@ -44,10 +44,11 @@ endif(POLICY CMP0048)
 ## defines nr_double_t
 add_definitions(-DHAVE_CONFIG_H)
 
-## ~~~
-## TODO
-## OPTION(ENABLE_QUCSLIB "enable qucslib build, default: OFF")
-## OPTION(ENABLE_DOUBLE " type of double representation, default=double")
+# ~~~
+# TODO
+# OPTION(ENABLE_QUCSLIB "enable qucslib build, default: OFF")
+# OPTION(ENABLE_DOUBLE " type of double representation, default=double")
+OPTION(ENABLE_CHECKS "enable checks of functions, default: OFF" OFF)
 
 ## TODO configure debug/release flags
 
@@ -85,20 +86,18 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/doc/qucsconv.1.cmake.in
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/doc/qucsator.1.cmake.in
 	${CMAKE_CURRENT_SOURCE_DIR}/doc/qucsator.1)
 
-## use last git commit hash along the version
-#set(GIT unknown)
-#if(EXISTS ${CMAKE_SOURCE_DIR}/../.git)
-#  find_package(Git)
-#  # Get the latest abbreviated commit hash of the working branch
-#  execute_process(
-#    COMMAND ${GIT_EXECUTABLE} log --pretty=format:%h -n 1u
-#    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-#    OUTPUT_VARIABLE GIT_COMMIT_HASH)
-#  set(GIT ${GIT_COMMIT_HASH})
-#  message(STATUS "Found Git repository, last commit hash: ${GIT}")
-#endif()
-
-## TODO rename the above variables? Project/Package?
+# use last git commit hash along the version
+set(GIT unknown)
+if(EXISTS ${CMAKE_SOURCE_DIR}/../.git)
+  find_package(Git)
+  # Get the latest abbreviated commit hash of the working branch
+  execute_process(
+	  COMMAND ${GIT_EXECUTABLE} log --pretty=format:%h -n 1u
+	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+	OUTPUT_VARIABLE GIT_COMMIT_HASH)
+set(GIT ${GIT_COMMIT_HASH})
+message(STATUS "Found Git repository, last commit hash: ${GIT}")
+endif()
 
 # Define to the address where bug reports for this package should be sent.
 set(PACKAGE_BUGREPORT "qucs-bugs@lists.sourceforge.net")
@@ -139,38 +138,21 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
 endif()
 
 #
-# Check if admsXml is available
+# Set up RPATH for the project
 #
-# * Use -DADMSXML_DIR=[path] to give the path containing admsXml
-# * Try a few other locations
-#
-# Needed by src/components/verlog
-# https://stackoverflow.com/questions/36102809/qucs-core-configure-error-needs-admsxml
-# TODO: download if not already installed
-find_program(
-  ADMSXML admsXml
-  HINTS ${ADMSXML_DIR}
-  PATHS /usr/local/bin/ /opt/local/bin/ /usr/bin
-  REQUIRED
-  DOC "admsXml application")
-message(STATUS "Found admsXml: " ${ADMSXML})
-
-##
-## Set up RPATH for the project
-##
-#option(ENABLE_RPATH "Enable rpath support on Linux and Mac" ON)
-#if(NOT CMAKE_INSTALL_RPATH)
-#  set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-#endif()
-#if(APPLE AND NOT CMAKE_INSTALL_NAME_DIR)
-#  set(CMAKE_INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
-#endif()
-#if(UNIX AND ENABLE_RPATH)
-#  set(CMAKE_SKIP_BUILD_RPATH FALSE)
-#  set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
-#  set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-#  set(CMAKE_MACOSX_RPATH TRUE)
-#endif()
+option(ENABLE_RPATH "Enable rpath support on Linux and Mac" ON)
+if(NOT CMAKE_INSTALL_RPATH)
+  set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+endif()
+if(APPLE AND NOT CMAKE_INSTALL_NAME_DIR)
+  set(CMAKE_INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
+endif()
+if(UNIX AND ENABLE_RPATH)
+  set(CMAKE_SKIP_BUILD_RPATH FALSE)
+  set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+  set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+  set(CMAKE_MACOSX_RPATH TRUE)
+endif()
 
 # CMake adds --enable-all-exports on Cygwin (since Cygwin is supposed to be
 # UNIX-like), but we need to add it explicitly for a native windows build with
@@ -200,26 +182,26 @@ else()
   set(CMAKE_CXX_FLAGS "-Wall -std=c++11")
 endif()
 
-## indiscriminate copy/paste from:
-## http://stackoverflow.com/questions/10984442/how-to-detect-c11-support-of-a-
-## compiler-with-cmake/20165220#20165220
-#set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
-#set(CMAKE_CXX_FLAGS_MINSIZEREL "-Os -DNDEBUG")
-#set(CMAKE_CXX_FLAGS_RELEASE "-O4 -DNDEBUG")
-#set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
+# indiscriminate copy/paste from:
+# http://stackoverflow.com/questions/10984442/how-to-detect-c11-support-of-a-
+# compiler-with-cmake/20165220#20165220
+set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
+set(CMAKE_CXX_FLAGS_MINSIZEREL "-Os -DNDEBUG")
+set(CMAKE_CXX_FLAGS_RELEASE "-O4 -DNDEBUG")
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
 
-## Compiler-specific C++11 activation.
-#if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
-#  execute_process(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion
-#                  OUTPUT_VARIABLE GCC_VERSION)
-#  if(NOT (GCC_VERSION VERSION_GREATER 4.7 OR GCC_VERSION VERSION_EQUAL 4.7))
-#    message(FATAL_ERROR "${PROJECT_NAME} requires g++ 4.7 or greater.")
-#  endif()
-#elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
-#  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
-#else()
-#  message(FATAL_ERROR "Your C++ compiler does not support C++11.")
-#endif()
+# Compiler-specific C++11 activation.
+if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
+  execute_process(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion
+	  OUTPUT_VARIABLE GCC_VERSION)
+  if(NOT (GCC_VERSION VERSION_GREATER 4.7 OR GCC_VERSION VERSION_EQUAL 4.7))
+	  message(FATAL_ERROR "${PROJECT_NAME} requires g++ 4.7 or greater.")
+endif()
+elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+else()
+  message(FATAL_ERROR "Your C++ compiler does not support C++11.")
+endif()
 
 #
 # Set position independed code PIC
@@ -227,34 +209,34 @@ endif()
 if(UNIX AND NOT APPLE)
   if(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
 	  set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-endif()
+  endif()
 endif()
 
 #
 # Go look for stuff to build/install...
 #
 add_subdirectory(src)
-#add_subdirectory(doc)
+add_subdirectory(doc)
 
-##
-## Custom uninstall target
-##
-#configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmake/uninstall.cmake.in"
-#               "${CMAKE_CURRENT_BINARY_DIR}/uninstall.cmake" IMMEDIATE @ONLY)
+#
+# Custom uninstall target
+#
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmake/uninstall.cmake.in"
+	"${CMAKE_CURRENT_BINARY_DIR}/uninstall.cmake" IMMEDIATE @ONLY)
 
-#add_custom_target(
-#  uninstall-core COMMAND ${CMAKE_COMMAND} -P
-#                        ${CMAKE_CURRENT_BINARY_DIR}/uninstall.cmake)
+add_custom_target(
+  uninstall-core COMMAND ${CMAKE_COMMAND} -P
+  ${CMAKE_CURRENT_BINARY_DIR}/uninstall.cmake)
 
-## TODO install distributables EXTRA_DIST = BUGS bootstrap depcomp RELEASE
+# TODO install distributables EXTRA_DIST = BUGS bootstrap depcomp RELEASE
 
-## TODO tarball TODO bundle
+# TODO tarball TODO bundle
 
-#set(CPACK_GENERATOR "TGZ")
-## SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "guitorri") #required
+set(CPACK_GENERATOR "TGZ")
+# SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "guitorri") #required
 
-## build a CPack driven installer package include
-## (InstallRequiredSystemLibraries)
-#set(CPACK_PACKAGE_VERSION_MAJOR 0)
-#set(CPACK_PACKAGE_VERSION_MINOR 18)
-#include(CPack)
+# build a CPack driven installer package include
+# (InstallRequiredSystemLibraries)
+set(CPACK_PACKAGE_VERSION_MAJOR 0)
+set(CPACK_PACKAGE_VERSION_MINOR 18)
+include(CPack)

@@ -3,13 +3,6 @@ cmake_minimum_required(VERSION 3.16)
 
 include(${PROJECT_SOURCE_DIR}/../../../../cmake/readMakeList.txt)
 
-#include_directories(
-#  ${qucsator_SOURCE_DIR}
-#  ${qucsator_CURRENT_SOURCE_DIR}
-#  ${qucsator_SOURCE_DIR}/src/math
-#  ${qucsator_SOURCE_DIR}/src/components # component.h
-#  ${qucsator_SOURCE_DIR}/src/components/devices) # devices.h
-
 readVariable(MakeList VERILOG_FILES VA_FILES)
 readVariable(MakeList VERILOG_XML XML_BUILD)
 
