@@ -150,9 +150,9 @@ find_package(FLEX 2.5.4 REQUIRED)
 # The FIND_PACKAGE fails. For now we provide a fallback with a custom FIND_PROGRAM.
 # The variable BISON_DIR is also available.
 # ~~~
-if(WIN32)
+if(WIN32 OR (UNIX AND NOT APPLE))
   find_package(BISON 2.4 REQUIRED)
-else() # Linux, OSX
+elseif(APPLE) # OSX. TODO: check if still relevant
   # use -DBISON_DIR=/path/ to provide the path to bison
   find_program(
     BISON_EXECUTABLE bison
