@@ -477,8 +477,8 @@ add_library(
 target_link_libraries(libqucsator PUBLIC
 	coreMath
 	coreComponents
-#	coreInterface
-#	coreVerilog
+	coreInterface
+	coreVerilog
 coreMicrostrip
 coreDevices
 coreDigital
