@@ -48,7 +48,6 @@ add_definitions(-DHAVE_CONFIG_H)
 # TODO
 # OPTION(ENABLE_QUCSLIB "enable qucslib build, default: OFF")
 # OPTION(ENABLE_DOUBLE " type of double representation, default=double")
-OPTION(ENABLE_CHECKS "enable checks of functions, default: OFF" OFF)
 
 ## TODO configure debug/release flags
 
