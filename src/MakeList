@@ -20,7 +20,7 @@ SRCS = \
 	exception.cpp \ 
 	exceptionstack.cpp \ 
 	fourier.cpp \ 
-	gperfappgen.cpp \ 
+	# gperfappgen.cpp \ # not intended to be compiled for libqucsator, but it is its own application
 	# hash.cpp \ # do not include, because it is included in nasolver.h (Template implementation)
 	hbsolver.cpp \ 
 	history.cpp \ 
