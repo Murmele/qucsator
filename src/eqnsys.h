@@ -136,7 +136,6 @@ class eqnsys
 
 } // namespace qucs
 
-// Why a source file is included here?
-//#include "eqnsys.cpp"
+#include "eqnsys.cpp"
 
 #endif /* __EQNSYS_H__ */
