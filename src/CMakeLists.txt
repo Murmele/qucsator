@@ -508,27 +508,6 @@ target_include_directories(libqucsator
 	${qucsator_BINARY_DIR}	    # qucs_typedefs.h
 	)
 
-get_target_property(MY_SOURCES libqucsator SOURCES)
-#message(FATAL_ERROR "${MY_SOURCES}")
-
-# By default, symbols provided by the sublibs that are not used by mainlib (which is all of them in this case)
-# are not used. This changes that.
-#if (WIN32)
-#    set_target_properties(libqucsator PROPERTIES
-#	LINK_FLAGS "/WHOLEARCHIVE"
-#    )
-#elseif (APPLE)
-#    set_target_properties(libqucsator PROPERTIES
-#	LINK_FLAGS "-Wl,-all_load"
-#    )
-#else ()
-#    set_target_properties(libqucsator PROPERTIES
-#	LINK_FLAGS "-Wl,--whole-archive"
-#    )
-#endif ()
-#set_target_properties(libqucsator PROPERTIES
-#    LINK_FLAGS "-Wl,--whole-archive"
-#)
 # rename the library to let it be libqucsator (not liblibqucsator).
 # The target name must be unique and qucsator is already used for the application
 set_target_properties(libqucsator PROPERTIES OUTPUT_NAME qucsator)
@@ -540,28 +519,17 @@ add_custom_target(equation DEPENDS ${qucsator_app_BINARY_DIR}/gperfapphash.cpp
 	${PROJECT_SOURCE_DIR}/equation.cpp)
 add_dependencies(libqucsator equation)
 
-
-# JUST FOR TESTING_ START
-add_executable(test123 main_temp.cpp)
-target_include_directories(test123
+#
+# Create qucsator application
+#
+add_executable(qucsator ucs.cpp)
+target_include_directories(qucsator
 	PRIVATE
 	${qucsator_SOURCE_DIR}
 	${qucsator_BINARY_DIR}
 	)
-target_link_libraries(test123 libqucsator)
-# JUST FOR TESTING_ ENDE
-
-##
-## Create qucsator application
-##
-#add_executable(qucsator ucs.cpp)
-#target_include_directories(qucsator
-#	PRIVATE
-#	${qucsator_SOURCE_DIR}
-#	${qucsator_BINARY_DIR}
-#	)
-### DL libs needed for opening a shared library
-#target_link_libraries(qucsator libqucsator ${CMAKE_DL_LIBS})
+## DL libs needed for opening a shared library
+target_link_libraries(qucsator libqucsator ${CMAKE_DL_LIBS})
 
 ##
 ## Handle install
