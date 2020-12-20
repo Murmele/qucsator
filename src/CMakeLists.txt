@@ -469,14 +469,14 @@ add_subdirectory(math)
 # single-shared-library-from-all-static-libraries-of-subprojec
 #
 add_library(
-  libqucsator SHARED
+  libqucsator STATIC
   ${LIBQUCS_SRC}
-  $<TARGET_OBJECTS:coreMath>
   $<TARGET_OBJECTS:coreComponents>
   $<TARGET_OBJECTS:coreMicrostrip>
   $<TARGET_OBJECTS:coreDevices>
   $<TARGET_OBJECTS:coreDigital>
   gperfapphash.cpp
+  $<TARGET_OBJECTS:coreMath>
   )
 
 #target_link_libraries(libqucsator PUBLIC
