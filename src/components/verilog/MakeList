@@ -34,14 +34,15 @@ VERILOG_FILES = \
 	pad4bit.va \ 
 	photodiode.va \ 
 	phototransistor.va \ 
-	potentiometer.va
+	potentiometer.va \
 	tff_SR.va \ 
 	vcresistor.va 
-	
+
+# order is important, because vtype needed by qucsMODULEcore.xml is defined in qucsVersion.xml
 VERILOG_XML = \
-	analogfunction.xml \ 
+	analogfunction.xml \
+	qucsVersion.xml \
 	qucsMODULEcore.xml \ 
-	qucsMODULEdefs.xml \ 
-	qucsMODULEgui.xml \ 
-	qucsMODULEguiJSONsymbol.xml \ 
-	qucsVersion.xml
+	qucsMODULEdefs.xml
+	#qucsMODULEgui.xml \ 
+	#qucsMODULEguiJSONsymbol.xml \ 

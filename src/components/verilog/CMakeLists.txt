@@ -44,6 +44,14 @@ list(APPEND gen_SRC ${_name}.cpp)
 endforeach()
 
 add_library(coreVerilog OBJECT ${gen_SRC})
+target_include_directories(coreVerilog
+	PRIVATE
+	${qucsator_BINARY_DIR} # config.h
+	${qucsator_app_SOURCE_DIR} # compat.h
+	${qucsator_app_SOURCE_DIR}/components # component.h
+	${qucsator_app_SOURCE_DIR}/math # matrix.h
+	${qucsator_app_SOURCE_DIR}/components/devices # device.h
+	)
 
 ## Distribute XML scripts
 set(XML_DIST ${XML_BUILD} qucsMODULEgui.xml qucsMODULEguiJSONsymbol.xml)
