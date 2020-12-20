@@ -86,6 +86,6 @@ class tridiag
 
 } // namespace qucs
 
-//#include "tridiag.cpp"
+#include "tridiag.cpp"
 
 #endif /* __TRIDIAG_H__ */

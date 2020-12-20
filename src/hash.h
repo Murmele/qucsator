@@ -171,6 +171,6 @@ class hashiterator
 
 } /* namespace qucs */
 
-//#include "hash.cpp"
+#include "hash.cpp"
 
 #endif /* __HASH_H__ */

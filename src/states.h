@@ -67,6 +67,6 @@ class states
 
 } // namespace qucs
 
-//#include "states.cpp"
+#include "states.cpp"
 
 #endif /* __STATES_H__ */

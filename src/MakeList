@@ -14,14 +14,14 @@ SRCS = \
 	devstates.cpp \ 
 	differentiate.cpp \ 
 	environment.cpp \ 
-	eqnsys.cpp \ 
+	# eqnsys.cpp \ # do not include, because it is included in nasolver.h (Template implementation)
 	equation.cpp \ 
 	evaluate.cpp \ 
 	exception.cpp \ 
 	exceptionstack.cpp \ 
 	fourier.cpp \ 
 	gperfappgen.cpp \ 
-	hash.cpp \ 
+	# hash.cpp \ # do not include, because it is included in nasolver.h (Template implementation)
 	hbsolver.cpp \ 
 	history.cpp \ 
 	input.cpp \ 
@@ -30,7 +30,7 @@ SRCS = \
 	logging.c \
 	matvec.cpp \ 
 	module.cpp \ 
-	nasolver.cpp \ 
+	# nasolver.cpp \ # do not include, because it is included in nasolver.h (Template implementation)
 	net.cpp \ 
 	nodelist.cpp \ 
 	nodeset.cpp \ 
@@ -41,14 +41,14 @@ SRCS = \
 	receiver.cpp \ 
 	spline.cpp \ 
 	spsolver.cpp \ 
-	states.cpp \ 
+	# states.cpp \ # do not include, because it is included in nasolver.h (Template implementation)
 	strlist.cpp \ 
 	sweep.cpp \ 
-	tmatrix.cpp \ 
+	# tmatrix.cpp \ # do not include, because it is included in nasolver.h (Template implementation)
 	transient.cpp \ 
-	tridiag.cpp \ 
+	# tridiag.cpp \ # do not include, because it is included in nasolver.h (Template implementation)
 	trsolver.cpp \
-	tvector.cpp \ 
+	# tvector.cpp \ # do not include, because it is included in nasolver.h (Template implementation)
 	# ucs.cpp \ Not used in the lib, only in the application it self
 	variable.cpp \ 
 	vector.cpp
