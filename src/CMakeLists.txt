@@ -38,9 +38,8 @@ endif()
 
 # Check for type sizes
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/checkTypeSize.cmake)
-
 ##
-# Configure the header qucs_typedefs.h, interpolate above definitions.
+# Configure the header qucs_typedefs.h, interpolate definitions in checkTypeSize
 #
 configure_file("${qucsator_SOURCE_DIR}/qucs_typedefs.h.cmake"
         "${qucsator_BINARY_DIR}/qucs_typedefs.h")
@@ -56,45 +55,7 @@ endif()
 configure_file("${qucsator_SOURCE_DIR}/config.h.cmake"
         "${qucsator_BINARY_DIR}/config.h")
 
-#
-# List of lexer/parsers type names
-#
-set(ParserTypes
-        csv
-	citi
-	dataset
-	mdl
-	netlist
-	touchstone
-	zvr)
-
-set(generated_SRC)
-foreach(type ${ParserTypes})
-  # Create custom Bison
-  set(bisonIn "${CMAKE_CURRENT_SOURCE_DIR}/parse_${type}.ypp")
-  set(bisonOut "parse_${type}.hpp"
-          "parse_${type}.cpp")
-  add_custom_command(
-          OUTPUT ${bisonOut}
-	COMMAND
-	${BISON_EXECUTABLE}
-	  --defines=parse_${type}.hpp
-	  --output=parse_${type}.cpp
-	  ${bisonIn}
-	  DEPENDS ${bisonIn})
-    # Create custom Flex
-    set(flexIn "${CMAKE_CURRENT_SOURCE_DIR}/scan_${type}.lpp")
-    set(flexOut "scan_${type}.cpp")
-    add_custom_command(
-	      OUTPUT ${flexOut}
-	    #COMMAND ${FLEX_EXECUTABLE} --outfile=${flexOut} ${flexIn} # not working on windows 10?
-	    COMMAND ${FLEX_EXECUTABLE} -o"${flexOut}" ${flexIn}
-	    DEPENDS ${flexIn})
-
-    list(APPEND generated_SRC ${bisonOut})
-    list(APPEND generated_SRC ${flexOut})
-endforeach()
-
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/generateLexerParserFiles.cmake)
 
 #
 # Source code libqucs
@@ -121,71 +82,7 @@ list(APPEND PUBLIC_HEADERS
         ${qucsator_BINARY_DIR}/config.h
 	${qucsator_BINARY_DIR}/qucs_typedefs.h)
 
-#
-# Replace 'evaluate::[whatever]' by NULL
-#
-# * evaluate.h (class evaluate): New class implementing the actual evaluation
-#   function (applications) for the equations in Qucs.
-#
-if (UNIX)
- add_custom_command(
-   OUTPUT gperfappgen.h
-   COMMAND
-     ${SED_TOOL} -e 's/evaluate::[a-zA-Z0-9_]*/NULL/g' <
-     ${CMAKE_CURRENT_SOURCE_DIR}/applications.h >
-     ${CMAKE_CURRENT_BINARY_DIR}/gperfappgen.h
-   DEPENDS ${applications.h})
-else()
-add_custom_command(
-  OUTPUT gperfappgen.h
-  COMMAND
-    ${SED_TOOL} -e "s/evaluate::[a-zA-Z0-9_]*/NULL/g" <
-    ${CMAKE_CURRENT_SOURCE_DIR}/applications.h >
-    ${CMAKE_CURRENT_BINARY_DIR}/gperfappgen.h
-  DEPENDS ${applications.h})
-endif()
-
-#
-# Compile gperfappgen * used to generate gperf input file (used in qucsator)
-#
-set(gperf_SRC gperfappgen.cpp gperfappgen.h)
-add_executable(gperfappgen ${gperf_SRC})
-target_include_directories(gperfappgen PRIVATE ${qucsator_BINARY_DIR}
-                            ${qucsator_app_BINARY_DIR}
-                            ${qucsator_app_SOURCE_DIR}
-			    ${qucsator_app_SOURCE_DIR}/math
-			    )
-
-#
-# Run gperfappgen, pipe to gperf input to gperfapphash.gph
-#
-add_custom_command(
-  OUTPUT gperfapphash.gph
-  COMMAND gperfappgen > ${CMAKE_CURRENT_BINARY_DIR}/gperfapphash.gph
-  DEPENDS gperfappgen
-  COMMENT "gperfappgen gets executed"
-  VERBATIM)
-
-#
-# Run gperf, create hash table. * -I, Include the necessary system include files
-# at the beginning of the code. * -m, Perform multiple iterations to minimize
-# generated table. * Replace '{""}' by '{"",0}; (why?)
-#
-if (UNIX)
- add_custom_command(
-   OUTPUT gperfapphash.cpp
-   COMMAND ${GPERF_TOOL} -I -m 8 ${CMAKE_CURRENT_BINARY_DIR}/gperfapphash.gph >
-           temp.gperf
-   COMMAND ${SED_TOOL} -e 's/{""},/{"",0},/g' < temp.gperf > ${CMAKE_CURRENT_BINARY_DIR}/gperfapphash.cpp
-   DEPENDS gperfapphash.gph)
-else()
-add_custom_command(
-  OUTPUT gperfapphash.cpp
-  COMMAND ${GPERF_TOOL} -I -m 8 ${CMAKE_CURRENT_BINARY_DIR}/gperfapphash.gph >
-          temp.gperf
-  COMMAND ${SED_TOOL} -e "s/{\"\"},/{\"\",0},/g" < temp.gperf > ${CMAKE_CURRENT_BINARY_DIR}/gperfapphash.cpp
-  DEPENDS gperfapphash.gph)
-endif()
+include(${qucsator_app_SOURCE_DIR}/cmake/generateGPerfAppHashCpp.cmake)
 
  #target <- source (includea) equation.cpp: gperfapphash.cpp
 
@@ -207,9 +104,6 @@ add_subdirectory(math)
 
 # Qucsconv application
 add_subdirectory(converter)
-
-## Linux?
-#set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--export-all-symbols")
 
 #
 # Build libqucs as SHARED, dynamic library
