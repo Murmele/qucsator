@@ -85,6 +85,12 @@ DO NOT add object targets to a target when they are already included into the sh
 ## :-1: error: libqucsator.so: undefined reference to `qucs::nasolver<double>::nasolver(qucs::nasolver<double>&)'
 During link of the libqucsator to the qucsator application
 problem commit: 1c2e56d5ac05cdea1adbd2fdc5612af489f1e187
+The problem was that the source files of the template definitions are compiled by it self. But this is not correct. Do not compile template definitions. So they where included again (as it was before) into the header and not compiled.
+solution commit: a0b92f912525602e495fdbd9176dbfc918ff58b7
+
+## [fatal..] Template not found: vtype [fatal..]   see:  [/home/martin/GITProjekte/qucs/qucsator/src/components/verilog/qucsMODULEcore.xml:871]
+order in components/verilog/Makelist.txt, VERILOG_XML, is important, because vtype needed by qucsMODULEcore.xml is defined in qucsVersion.xml
+
 
 
 
