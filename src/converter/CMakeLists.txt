@@ -49,12 +49,12 @@ add_custom_command(
           ${CMAKE_CURRENT_BINARY_DIR}/qucsdefs.h
   DEPENDS qucsator) # TODO: here is a build problem
 
-add_custom_target(defs DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/qucsdefs.h)
+add_custom_target(defs_converter DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/qucsdefs.h)
 
 # TODO: check that the number of files in conv_generated is same as for ParserTypes
 add_executable(qucsconv ${QUCSCONV_SRC} ${conv_generated})
 
-add_dependencies(qucsconv defs)
+add_dependencies(qucsconv defs_converter)
 
 # TODO: why CMAKE_DL_LIBS needed?
 target_link_libraries(qucsconv libqucsator ${CMAKE_DL_LIBS})

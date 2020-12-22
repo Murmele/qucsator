@@ -224,7 +224,7 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmake/uninstall.cmake.in"
 	"${CMAKE_CURRENT_BINARY_DIR}/uninstall.cmake" IMMEDIATE @ONLY)
 
 add_custom_target(
-  uninstall-core COMMAND ${CMAKE_COMMAND} -P
+  uninstall-qucsator COMMAND ${CMAKE_COMMAND} -P
   ${CMAKE_CURRENT_BINARY_DIR}/uninstall.cmake)
 
 # TODO install distributables EXTRA_DIST = BUGS bootstrap depcomp RELEASE
